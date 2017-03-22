@@ -3,14 +3,23 @@ require_relative 'leaf'
 
 class BinarySearchTree
 
-  attr_accessor :head
+  attr_reader :head
 
   def initialize
     @head = Leaf.new
   end
 
-  def insert(key = nil, value = nil)
-    @head = head.insert(Node.new(key, value))
+  def insert(node)
+    @head = head.insert(node)
+    depth_of(node)
   end 
+
+  def depth_of(node)
+    @head.depth_of(node)
+  end
+
+  def display_tree
+    @head.display
+  end
 
 end

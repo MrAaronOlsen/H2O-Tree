@@ -33,4 +33,24 @@ class NodeTest < Minitest::Test
     assert_instance_of Node, node.left
   end
 
+  def test_that_depth_returns_depth_when_looking_for_node
+    node = Node.new("Movie", 5)
+    assert_equal node.depth_of(node, 10), 10
+  end
+
+  def test_that_depth_returns_depth_when_looking_right_for_node
+    node1 = Node.new("Movie", 5)
+    node2 = Node.new("Movie", 10)
+    node1.insert(node2)
+    assert_equal node1.depth_of(node2), 1
+  end
+
+  def test_that_depth_returns_depth_when_looking_left_for_node
+    node1 = Node.new("Movie", 10)
+    node2 = Node.new("Movie", 5)
+    node1.insert(node2)
+    assert_equal node1.depth_of(node2), 1
+  end
+
+
 end
