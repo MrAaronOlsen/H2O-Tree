@@ -4,8 +4,12 @@ class Leaf
     return node
   end
 
-  def depth_of(node, depth = nil)
-    depth
+  def include?(value)
+    false
+  end
+
+  def depth_of(node, depth)
+    false
   end
 
   def display

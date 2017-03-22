@@ -21,6 +21,12 @@ class NodeTest < Minitest::Test
     refute node.value
   end
 
+  def test_that_get_value_from_returns_value_from_value_or_node
+    node = Node.new("Movie", 10)
+    assert_equal node.get_value_from(Node.new("Move", 6)), 6
+    assert_equal node.get_value_from(10), 10
+  end
+
   def test_that_insert_into_right_when_right_is_leaf
     node = Node.new("Movie", 5)
     node.insert(Node.new("Better Movie", 10))
@@ -38,6 +44,12 @@ class NodeTest < Minitest::Test
     assert_equal node.depth_of(node, 10), 10
   end
 
+  def test_that_depth_returns_depth_when_looking_for_value
+    node = Node.new("Movie", 5)
+    node.insert(Node.new("Movie", 10))
+    assert_equal node.depth_of(10), 1
+  end
+
   def test_that_depth_returns_depth_when_looking_right_for_node
     node1 = Node.new("Movie", 5)
     node2 = Node.new("Movie", 10)
@@ -52,5 +64,23 @@ class NodeTest < Minitest::Test
     assert_equal node1.depth_of(node2), 1
   end
 
+  def test_that_include_returns_false_when_value_not_there
+    node = Node.new("Movie", 10)
+    refute node.include?(11)
+  end
+
+  def test_that_include_returns_true_when_value_in_right_branch
+    node1 = Node.new("Movie", 10)
+    node2 = Node.new("Movie", 12)
+    node1.insert(node2)
+    assert node1.include?(12)
+  end
+
+  def test_that_include_returns_true_when_value_in_left_branch
+    node1 = Node.new("Movie", 12)
+    node2 = Node.new("Movie", 10)
+    node1.insert(node2)
+    assert node1.include?(12)
+  end
 
 end

@@ -15,9 +15,14 @@ class LeafTest < Minitest::Test
     assert_instance_of Node, leaf.insert(Node.new)
   end
 
-  def test_that_depth_of_returns_depth
+  def test_that_depth_of_returns_false
     leaf = Leaf.new
-    assert_equal leaf.depth_of(Node.new, 10), 10
+    refute leaf.depth_of(Node.new, 10)
+  end
+
+  def test_that_include_returns_false
+    leaf = Leaf.new
+    refute leaf.include?(10)
   end
 
 end
