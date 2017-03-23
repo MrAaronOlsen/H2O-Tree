@@ -1,7 +1,7 @@
 require_relative 'node'
 require_relative 'leaf'
 
-class BinarySearchTree
+class Tree
 
   attr_reader :head
 
@@ -16,21 +16,19 @@ class BinarySearchTree
   end
 
   def load(file)
-    loads = 0
-    nodes = parse(file)
-    nodes.each do |node|
+    lines = parse(file)
+    inserts = 0
+    lines.each do |node|
       insert(node[0], node[1])
-      loads+=1
+      inserts+=1
     end
-    loads
+    inserts
   end
   
   def parse(file)
     File.readlines(file).map do |line|
       i = line.index(",")
-      value = line[0...i].to_i
-      key = line[i+2..-1].chomp
-      [key, value]
+      [line[i+2..-1].chomp, line[0...i].to_i]
     end
   end
 

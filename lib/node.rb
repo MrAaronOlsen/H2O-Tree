@@ -3,7 +3,7 @@ require 'pry'
 
 class Node
 
-  attr_reader :left, :right, :key, :value
+  attr_reader :key, :value, :left, :right
 
   def initialize(key = nil, value = nil)
     @left = Leaf.new
@@ -13,11 +13,11 @@ class Node
   end
   
   def insert(node)
-    if node.value <= value
-      @left = left.insert(node)
+    if node.value <= @value
+      @left = @left.insert(node)
       self
-    elsif node.value > value
-      @right = right.insert(node)
+    elsif node.value > @value
+      @right = @right.insert(node)
       self
     end
   end
@@ -35,10 +35,15 @@ class Node
   def depth_of(node_or_value, depth = 0)
     return depth if node_or_value == self || node_or_value == @value
 
-    check_value = get_value_from(node_or_value)
+    check_for_value = get_value_from(node_or_value)
     depth+=1
 
-    left_or_right(check_value, depth)
+    left_or_right(check_for_value, depth)
+  end
+
+  def get_value_from(node_or_value)
+    return node_or_value.value if node_or_value.is_a? Node
+    node_or_value
   end
 
   def left_or_right(check_value, arg)
@@ -49,17 +54,12 @@ class Node
     end
   end
 
-  def get_value_from(thing)
-    return thing.value if thing.is_a? Node
-    thing
-  end
-
   def max(max_value = @value)
-    right.max(@value)
+    @right.max(@value)
   end
 
   def min(min_value = @value)
-    left.min(@value)
+    @left.min(@value)
   end
 
   def leaves(num)
@@ -69,10 +69,7 @@ class Node
 
   def health(level, report = [])
     if level == 0
-      node_report = []
-      node_report[0] = @value
-      node_report[1] = count_children
-      report << node_report
+      report << [@value, count_children]
     else
       level-=1
       @left.health(level, report)
