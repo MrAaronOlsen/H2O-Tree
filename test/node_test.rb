@@ -83,4 +83,27 @@ class NodeTest < Minitest::Test
     assert node1.include?(12)
   end
 
+  def test_that_leaves_returns_number_of_leaves
+    node1 = Node.new("Movie", 12)
+    assert_equal node1.leaves(0), 2
+  end
+
+  def test_that_count_children_returns_children
+    node1 = Node.new("Movie", 12)
+    node1.insert(Node.new("Movie", 10))
+    node1.insert(Node.new("Movie", 40))
+    node1.insert(Node.new("Movie", 20))
+
+    assert_equal node1.count_children, 4
+  end
+
+  def test_that_health_returns_report_at_level
+    node1 = Node.new("Movie", 12)
+    node1.insert(Node.new("Movie", 10))
+    node1.insert(Node.new("Movie", 40))
+    node1.insert(Node.new("Movie", 20))
+
+    assert_equal node1.health(0), [[12, 4]]
+  end
+
 end

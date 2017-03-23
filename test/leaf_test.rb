@@ -25,4 +25,9 @@ class LeafTest < Minitest::Test
     refute leaf.include?(10)
   end
 
+  def test_that_leaves_adds_to_leaves
+    leaf = Leaf.new
+    assert_equal leaf.leaves(0), 1
+  end
+
 end

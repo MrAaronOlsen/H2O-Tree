@@ -1,5 +1,4 @@
 require_relative 'leaf'
-
 require 'pry'
 
 class Node
@@ -14,7 +13,7 @@ class Node
   end
   
   def insert(node)
-    if node.value < value
+    if node.value <= value
       @left = left.insert(node)
       self
     elsif node.value > value
@@ -26,7 +25,7 @@ class Node
   def include?(value)
     if value == @value
       true
-    elsif value < @value
+    elsif value <= @value
       @left.include?(value)
     elsif value > @value
       @right.include?(value)
@@ -43,7 +42,7 @@ class Node
   end
 
   def left_or_right(check_value, arg)
-    if check_value < @value
+    if check_value <= @value
       @left.depth_of(check_value, arg)
     elsif check_value > @value
       @right.depth_of(check_value, arg)
@@ -55,10 +54,43 @@ class Node
     thing
   end
 
-  def display
-    puts "Key: #{key}, Value: #{value}"
-    @left.display
-    @right.display
+  def max(max_value = @value)
+    right.max(@value)
+  end
+
+  def min(min_value = @value)
+    left.min(@value)
+  end
+
+  def leaves(num)
+    num = @left.leaves(num)
+    @right.leaves(num)
+  end
+
+  def health(level, report = [])
+    if level == 0
+      node_report = []
+      node_report[0] = @value
+      node_report[1] = count_children
+      report << node_report
+    else
+      level-=1
+      @left.health(level, report)
+      @right.health(level, report)
+    end
+    report
+  end
+
+  def count_children(children = 0)
+    children+=1
+    children = @left.count_children(children)
+    @right.count_children(children)
+  end
+
+  def sort(array)
+    @left.sort(array)
+    array << {@key => @value}
+    @right.sort(array)
   end
 
 end
