@@ -11,7 +11,7 @@ class Node
     @key = key
     @value = value
   end
-  
+
   def insert(node)
     if node.value <= @value
       @left = @left.insert(node)
@@ -51,6 +51,53 @@ class Node
       @left.depth_of(check_value, arg)
     elsif check_value > @value
       @right.depth_of(check_value, arg)
+    end
+  end
+
+  def delete(delete_value)
+    node = replace(delete_value)
+    remove(node)
+  end
+
+  def remove(node)
+    if @right == node
+      node = @right
+      @right = Leaf.new
+      node
+    elsif @left == node
+      node = @left
+      @left = Leaf.new
+      node
+    elsif node.value <= @value
+      @left.remove(node)
+    elsif node.value > @value
+      @right.remove(node)
+    end
+  end
+
+  def replace(delete_value)
+    if @value == delete_value
+      assign_new(fetch_node(@right.min))
+      self
+    elsif delete_value <= @value
+      @left.replace(delete_value)
+    elsif delete_value > @value
+      @right.replace(delete_value)
+    end
+  end
+
+  def assign_new(replacement)
+    @key = replacement.key
+    @value = replacement.value
+  end
+
+  def fetch_node(find_value)
+    if @value == find_value
+      self
+    elsif find_value <= @value
+      @left.fetch_node(find_value)
+    elsif find_value > @value
+      @right.fetch_node(find_value)
     end
   end
 

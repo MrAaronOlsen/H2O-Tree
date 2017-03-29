@@ -8,21 +8,56 @@ require "./lib/node"
 
 class TreeTest < Minitest::Test
 
-  attr_reader :b_tree
+  attr_reader :b_tree, :delete_tree
 
   def setup
     @b_tree = Tree.new
+    @delete_tree = Tree.new
     @node1 = Node.new("Movie", 12)
     @node2 = Node.new("Movie", 10)
     @node3 = Node.new("Movie", 14)
     @node4 = Node.new("Movie", 11)
     @node5 = Node.new("Movie", 8)
-    
+    @node6 = Node.new("Movie", 20)
+    @node7 = Node.new("Movie", 30)
+    @node8 = Node.new("Movie", 17)
+    @node9 = Node.new("Movie", 19)
+    @node10 = Node.new("Movie", 15)
+
     b_tree.insert(@node1)
     b_tree.insert(@node2)
     b_tree.insert(@node3)
     b_tree.insert(@node4)
     b_tree.insert(@node5)
+    b_tree.insert(@node6)
+    b_tree.insert(@node7)
+    b_tree.insert(@node8)
+    b_tree.insert(@node9)
+    b_tree.insert(@node10)
+
+    @delete_tree = Tree.new
+    @node11 = Node.new("Movie", 12)
+    @node12 = Node.new("Movie", 10)
+    @node13 = Node.new("Movie", 14)
+    @node14 = Node.new("Movie", 11)
+    @node15 = Node.new("Movie", 8)
+    @node16 = Node.new("Movie", 20)
+    @node17 = Node.new("Movie", 30)
+    @node18 = Node.new("Movie", 17)
+    @node19 = Node.new("Movie", 19)
+    @node20 = Node.new("Bomb!", 15)
+
+    delete_tree.insert(@node11)
+    delete_tree.insert(@node12)
+    delete_tree.insert(@node13)
+    delete_tree.insert(@node14)
+    delete_tree.insert(@node15)
+    delete_tree.insert(@node16)
+    delete_tree.insert(@node17)
+    delete_tree.insert(@node18)
+    delete_tree.insert(@node19)
+    delete_tree.insert(@node20)
+
   end
 
   def test_that_it_is_a_binary_search_tree
@@ -66,6 +101,21 @@ class TreeTest < Minitest::Test
     assert_equal b_tree.insert(node6), 3
   end
 
+  def test_that_fetch_node_gets_correct_node
+    assert_equal delete_tree.fetch_node(14), @node13
+  end
+
+  def test_that_it_replaces_with_correct_node
+    replaced = delete_tree.delete(14)
+    assert_equal replaced.value, 15
+    assert_equal replaced.key, 'Bomb!'
+  end
+
+  def test_tat_it_deletes_correct_node
+    delete_tree.delete(14)
+    refute delete_tree.include?(14)
+  end
+
   def test_that_include_returns_true_on_right_heavy_tree
     assert b_tree.include?(12)
   end
@@ -82,14 +132,14 @@ class TreeTest < Minitest::Test
     refute b_tree.include?(7)
   end
 
-  def test_that_make_node_from_returns_node
+  def test_that_node_from_makes_node
     b_tree = Tree.new
-    assert_instance_of Node, b_tree.make_node_from(Node.new)
-    assert_instance_of Node, b_tree.make_node_from("Movie", 10)
+    assert_instance_of Node, b_tree.node_from(Node.new)
+    assert_instance_of Node, b_tree.node_from("Movie", 10)
   end
 
   def test_that_max_returns_max
-    assert_equal b_tree.max, 14
+    assert_equal b_tree.max, 30
   end
 
   def test_that_min_returns_min
@@ -97,7 +147,10 @@ class TreeTest < Minitest::Test
   end
 
   def test_that_sort_returns_sorted_array_of_hashes
-    assert_equal b_tree.sort, [{"Movie"=>8}, {"Movie"=>10}, {"Movie"=>11}, {"Movie"=>12}, {"Movie"=>14}]
+    assert_equal b_tree.sort, [ {"Movie"=>8},  {"Movie"=>10}, {"Movie"=>11},
+                                {"Movie"=>12}, {"Movie"=>14}, {"Movie"=>15},
+                                {"Movie"=>17}, {"Movie"=>19}, {"Movie"=>20},
+                                {"Movie"=>30} ]
   end
 
   def test_load_returns_number_of_inserts
@@ -106,11 +159,11 @@ class TreeTest < Minitest::Test
   end
 
   def test_that_leaves_returns_num_of_leafs
-    assert_equal b_tree.leaves, 6
+    assert_equal b_tree.leaves, 11
   end
 
   def test_that_health_returns_report
-    assert_equal b_tree.health(1), [[10, 3, 60], [14, 1, 20]]
+    assert_equal b_tree.health(1), [[10, 3, 30], [14, 6, 60]]
   end
 
 end

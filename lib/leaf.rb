@@ -1,7 +1,11 @@
 class Leaf
 
   def insert(node)
-    return node
+    node
+  end
+
+  def delete(value)
+    false
   end
 
   def include?(value)

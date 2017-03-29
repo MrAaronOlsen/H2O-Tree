@@ -10,34 +10,17 @@ class Tree
   end
 
   def insert(key_or_node, value = nil)
-    node = make_node_from(key_or_node, value)
+    node = node_from(key_or_node, value)
     @head = head.insert(node)
     depth_of(node)
   end
 
-  def load(file)
-    lines = parse(file)
-    inserts = 0
-    lines.each do |node|
-      insert(node[0], node[1])
-      inserts+=1
-    end
-    inserts
-  end
-  
-  def parse(file)
-    File.readlines(file).map do |line|
-      i = line.index(",")
-      [line[i+2..-1].chomp, line[0...i].to_i]
-    end
+  def delete(value)
+    @head.delete(value)
   end
 
-  def make_node_from(key_or_node, value = nil)
-    if key_or_node.is_a? Node
-      key_or_node
-    else
-      Node.new(key_or_node, value)
-    end
+  def fetch_node(value)
+    @head.fetch_node(value)
   end
 
   def include?(value)
@@ -74,6 +57,31 @@ class Tree
 
   def sort
     @head.sort(Array.new)
+  end
+
+  def load(file)
+    lines = parse(file)
+    inserts = 0
+    lines.each do |node|
+      insert(node[0], node[1])
+      inserts+=1
+    end
+    inserts
+  end
+
+  def parse(file)
+    File.readlines(file).map do |line|
+      i = line.index(",")
+      [line[i+2..-1].chomp, line[0...i].to_i]
+    end
+  end
+
+  def node_from(key_or_node, value = nil)
+    if key_or_node.is_a? Node
+      key_or_node
+    else
+      Node.new(key_or_node, value)
+    end
   end
 
 end
