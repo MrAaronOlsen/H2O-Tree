@@ -8,11 +8,10 @@ require "./lib/node"
 
 class TreeTest < Minitest::Test
 
-  attr_reader :b_tree, :delete_tree
+  attr_reader :b_tree
 
   def setup
     @b_tree = Tree.new
-    @delete_tree = Tree.new
     @node1 = Node.new("Movie", 12)
     @node2 = Node.new("Movie", 10)
     @node3 = Node.new("Movie", 14)
@@ -22,7 +21,7 @@ class TreeTest < Minitest::Test
     @node7 = Node.new("Movie", 30)
     @node8 = Node.new("Movie", 17)
     @node9 = Node.new("Movie", 19)
-    @node10 = Node.new("Movie", 15)
+    @node10 = Node.new("Bomb!", 15)
 
     b_tree.insert(@node1)
     b_tree.insert(@node2)
@@ -34,29 +33,6 @@ class TreeTest < Minitest::Test
     b_tree.insert(@node8)
     b_tree.insert(@node9)
     b_tree.insert(@node10)
-
-    @delete_tree = Tree.new
-    @node11 = Node.new("Movie", 12)
-    @node12 = Node.new("Movie", 10)
-    @node13 = Node.new("Movie", 14)
-    @node14 = Node.new("Movie", 11)
-    @node15 = Node.new("Movie", 8)
-    @node16 = Node.new("Movie", 20)
-    @node17 = Node.new("Movie", 30)
-    @node18 = Node.new("Movie", 17)
-    @node19 = Node.new("Movie", 19)
-    @node20 = Node.new("Bomb!", 15)
-
-    delete_tree.insert(@node11)
-    delete_tree.insert(@node12)
-    delete_tree.insert(@node13)
-    delete_tree.insert(@node14)
-    delete_tree.insert(@node15)
-    delete_tree.insert(@node16)
-    delete_tree.insert(@node17)
-    delete_tree.insert(@node18)
-    delete_tree.insert(@node19)
-    delete_tree.insert(@node20)
 
   end
 
@@ -102,18 +78,18 @@ class TreeTest < Minitest::Test
   end
 
   def test_that_fetch_node_gets_correct_node
-    assert_equal delete_tree.fetch_node(14), @node13
+    assert_equal b_tree.fetch_node(14), @node3
   end
 
   def test_that_it_replaces_with_correct_node
-    replaced = delete_tree.delete(14)
+    replaced = b_tree.delete(14)
     assert_equal replaced.value, 15
     assert_equal replaced.key, 'Bomb!'
   end
 
   def test_tat_it_deletes_correct_node
-    delete_tree.delete(14)
-    refute delete_tree.include?(14)
+    b_tree.delete(14)
+    refute b_tree.include?(14)
   end
 
   def test_that_include_returns_true_on_right_heavy_tree
@@ -148,7 +124,7 @@ class TreeTest < Minitest::Test
 
   def test_that_sort_returns_sorted_array_of_hashes
     assert_equal b_tree.sort, [ {"Movie"=>8},  {"Movie"=>10}, {"Movie"=>11},
-                                {"Movie"=>12}, {"Movie"=>14}, {"Movie"=>15},
+                                {"Movie"=>12}, {"Movie"=>14}, {"Bomb!"=>15},
                                 {"Movie"=>17}, {"Movie"=>19}, {"Movie"=>20},
                                 {"Movie"=>30} ]
   end
