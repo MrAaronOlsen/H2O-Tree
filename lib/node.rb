@@ -3,55 +3,38 @@ require 'pry'
 
 class Node
 
-  attr_reader :key, :value, :left, :right
+  attr_accessor :key, :value, :childs
 
   def initialize(key = nil, value = nil)
-    @left = Leaf.new
-    @right = Leaf.new
+    @childs = [Leaf.new, Leaf.new]
     @key = key
     @value = value
   end
 
   def insert(node)
-    if node.value <= @value
-      @left = @left.insert(node)
-      self
-    elsif node.value > @value
-      @right = @right.insert(node)
+    filter(node.value) do |go|
+      @childs[go] = @childs[go].insert(node)
       self
     end
   end
 
   def include?(value)
-    if value == @value
-      true
-    elsif value <= @value
-      @left.include?(value)
-    elsif value > @value
-      @right.include?(value)
-    end
+    return true if value == @value
+    filter(value) { |go| @childs[go].include?(value) }
   end
 
-  def depth_of(node_or_value, depth = 0)
-    return depth if node_or_value == self || node_or_value == @value
+  def depth_of(value, depth = 0)
+    return depth if value == self || value == @value
 
-    check_for_value = get_value_from(node_or_value)
+    value = value_node?(value)
     depth+=1
 
-    left_or_right(check_for_value, depth)
+    filter(value) { |go| @childs[go].depth_of(value, depth) }
   end
 
-  def get_value_from(node_or_value)
-    return node_or_value.value if node_or_value.is_a? Node
-    node_or_value
-  end
-
-  def left_or_right(check_value, arg)
-    if check_value <= @value
-      @left.depth_of(check_value, arg)
-    elsif check_value > @value
-      @right.depth_of(check_value, arg)
-    end
+  def value_node?(thing)
+    return thing.value if thing.is_a? Node
+    thing
   end
 
   def delete(delete_value)
@@ -60,58 +43,44 @@ class Node
   end
 
   def remove(node)
-    if @right == node
-      node = @right
-      @right = Leaf.new
-      node
-    elsif @left == node
-      node = @left
-      @left = Leaf.new
-      node
-    elsif node.value <= @value
-      @left.remove(node)
-    elsif node.value > @value
-      @right.remove(node)
+    get_child(node) do |go|
+      node = @childs[go]
+      @childs[go] = Leaf.new
+      return node
     end
+
+    filter(node.value) { |go| @childs[go].remove(node) }
   end
 
-  def replace(delete_value)
-    if @value == delete_value
-      assign_new(fetch_node(@right.min))
-      self
-    elsif delete_value <= @value
-      @left.replace(delete_value)
-    elsif delete_value > @value
-      @right.replace(delete_value)
+  def replace(value)
+    if @value == value
+      return assign_new(fetch_node(@childs[1].min))
     end
+    filter(value) { |go| @childs[go].replace(value) }
   end
 
   def assign_new(replacement)
     @key = replacement.key
     @value = replacement.value
+    self
   end
 
-  def fetch_node(find_value)
-    if @value == find_value
-      self
-    elsif find_value <= @value
-      @left.fetch_node(find_value)
-    elsif find_value > @value
-      @right.fetch_node(find_value)
-    end
+  def fetch_node(value)
+    return self if @value == value
+    filter(value) { |go| @childs[go].fetch_node(value) }
   end
 
-  def max(max_value = @value)
-    @right.max(@value)
+  def max(value = nil)
+    @childs[1].max(@value)
   end
 
-  def min(min_value = @value)
-    @left.min(@value)
+  def min(value = nil)
+    @childs[0].min(@value)
   end
 
   def leaves(num)
-    num = @left.leaves(num)
-    @right.leaves(num)
+    num = @childs[0].leaves(num)
+    @childs[1].leaves(num)
   end
 
   def health(level, report = [])
@@ -119,22 +88,30 @@ class Node
       report << [@value, count_children]
     else
       level-=1
-      @left.health(level, report)
-      @right.health(level, report)
+      @childs[0].health(level, report)
+      @childs[1].health(level, report)
     end
     report
   end
 
   def count_children(children = 0)
     children+=1
-    children = @left.count_children(children)
-    @right.count_children(children)
+    children = @childs[0].count_children(children)
+    @childs[1].count_children(children)
   end
 
   def sort(array)
-    @left.sort(array)
+    @childs[0].sort(array)
     array << {@key => @value}
-    @right.sort(array)
+    @childs[1].sort(array)
+  end
+
+  def filter(value)
+    value <= @value ? yield(0) : yield(1)
+  end
+
+  def get_child(node)
+    @childs[0] == node ? yield(0) : yield(1)
   end
 
 end

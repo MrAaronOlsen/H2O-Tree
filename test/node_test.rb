@@ -14,8 +14,8 @@ class NodeTest < Minitest::Test
 
   def test_that_right_and_left_are_leafs_when_created
     node = Node.new
-    assert_instance_of Leaf, node.left
-    assert_instance_of Leaf, node.right
+    assert_instance_of Leaf, node.childs[0]
+    assert_instance_of Leaf, node.childs[1]
   end
 
   def test_that_key_and_value_are_nil_when_created
@@ -24,22 +24,22 @@ class NodeTest < Minitest::Test
     refute node.value
   end
 
-  def test_that_get_value_from_returns_value_from_value_or_node
+  def test_that_node_or_value_returns_value_from_value_or_node
     node = Node.new("Movie", 10)
-    assert_equal node.get_value_from(Node.new("Move", 6)), 6
-    assert_equal node.get_value_from(10), 10
+    assert_equal node.value_node?(Node.new("Move", 6)), 6
+    assert_equal node.value_node?(10), 10
   end
 
   def test_that_insert_into_right_when_right_is_leaf
     node = Node.new("Movie", 5)
     node.insert(Node.new("Better Movie", 10))
-    assert_instance_of Node, node.right
+    assert_instance_of Node, node.childs[1]
   end
 
   def test_that_insert_into_left_when_right_is_leaf
     node = Node.new("Movie", 5)
     node.insert(Node.new("Worst Movie", 0))
-    assert_instance_of Node, node.left
+    assert_instance_of Node, node.childs[0]
   end
 
   def test_that_depth_returns_depth_when_looking_for_node
