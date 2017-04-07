@@ -16,7 +16,8 @@ class Tree
   end
 
   def delete(value)
-    @head.delete(value)
+    deleted = @head.delete(value)
+    [remove(deleted), deleted]
   end
 
   def fetch_node(value)
@@ -41,6 +42,14 @@ class Tree
 
   def leaves
     @head.leaves(0)
+  end
+
+  def remove(node)
+    @head.remove_child(node)
+  end
+
+  def find_has_child(node)
+    @head.find_has_child(node)
   end
 
   def health(level)

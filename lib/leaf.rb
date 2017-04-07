@@ -8,6 +8,10 @@ class Leaf
     false
   end
 
+  def replace(node)
+    false
+  end
+
   def include?(value)
     false
   end
@@ -38,6 +42,14 @@ class Leaf
 
   def sort(array)
     array
+  end
+
+  def remove(node)
+    node
+  end
+
+  def remove_child(node)
+    node
   end
 
 end

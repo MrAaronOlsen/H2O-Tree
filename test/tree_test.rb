@@ -87,7 +87,7 @@ class TreeTest < Minitest::Test
     assert_equal replaced.key, 'Bomb!'
   end
 
-  def test_tat_it_deletes_correct_node
+  def test_that_it_deletes_correct_node
     b_tree.delete(14)
     refute b_tree.include?(14)
   end

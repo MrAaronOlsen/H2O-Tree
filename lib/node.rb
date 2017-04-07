@@ -38,25 +38,15 @@ class Node
   end
 
   def delete(delete_value)
-    node = replace(delete_value)
-    remove(node)
+    replace(delete_value)
   end
 
-  def remove(node)
-    get_child(node) do |go|
-      node = @childs[go]
-      @childs[go] = Leaf.new
-      return node
+  def replace(replace_value)
+    if @value == replace_value
+      assign_new(fetch_node(@childs[1].min(@value)))
+    else
+      filter(replace_value) { |go| @childs[go].replace(replace_value) }
     end
-
-    filter(node.value) { |go| @childs[go].remove(node) }
-  end
-
-  def replace(value)
-    if @value == value
-      return assign_new(fetch_node(@childs[1].min))
-    end
-    filter(value) { |go| @childs[go].replace(value) }
   end
 
   def assign_new(replacement)
@@ -65,9 +55,9 @@ class Node
     self
   end
 
-  def fetch_node(value)
-    return self if @value == value
-    filter(value) { |go| @childs[go].fetch_node(value) }
+  def fetch_node(fetch_value)
+    return self if @value == fetch_value
+    filter(fetch_value) { |go| @childs[go].fetch_node(fetch_value) }
   end
 
   def max(value = nil)
@@ -110,8 +100,16 @@ class Node
     value <= @value ? yield(0) : yield(1)
   end
 
-  def get_child(node)
-    @childs[0] == node ? yield(0) : yield(1)
+  def remove_child(node)
+    if @childs[0] == node
+      @childs[0] = Leaf.new
+      return node
+    elsif @childs[1] == node
+      @childs[1] = Leaf.new
+      return node
+    end
+    node = @childs[0].remove_child(node)
+    @childs[1].remove_child(node)
   end
 
 end
