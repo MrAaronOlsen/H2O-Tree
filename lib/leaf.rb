@@ -16,8 +16,8 @@ class Leaf
     false
   end
 
-  def depth_of(node, depth = nil)
-    nil
+  def depth_of(node, depth = false)
+    false
   end
 
   def max(max_value)
@@ -42,10 +42,6 @@ class Leaf
 
   def sort(array)
     array
-  end
-
-  def remove(node)
-    node
   end
 
   def remove_child(node)
