@@ -1,10 +1,4 @@
-require "minitest/autorun"
-require "minitest/pride"
-require "pry"
-
-require "./lib/tree"
-require "./lib/node"
-
+require './test/test_helper'
 
 class TreeTest < Minitest::Test
 
@@ -83,8 +77,12 @@ class TreeTest < Minitest::Test
 
   def test_that_it_replaces_with_correct_node
     replaced = b_tree.delete(14)
-    assert_equal replaced.value, 15
-    assert_equal replaced.key, 'Bomb!'
+
+    assert_equal replaced.first.value, 15
+    assert_equal replaced.first.key, 'Bomb!'
+
+    assert_equal replaced.last.value, 14
+    assert_equal replaced.last.key, 'Movie'
   end
 
   def test_that_it_deletes_correct_node

@@ -46,7 +46,7 @@ class Tree
 
   def leaves
     @head.leaves(0)
-  end  
+  end
 
   def find_has_child(node)
     @head.find_has_child(node)

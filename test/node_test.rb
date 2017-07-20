@@ -1,9 +1,4 @@
-require "minitest/autorun"
-require "minitest/pride"
-require "pry"
-
-require "./lib/node"
-require "./lib/leaf"
+require './test/test_helper'
 
 class NodeTest < Minitest::Test
 
