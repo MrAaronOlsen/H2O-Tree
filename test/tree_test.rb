@@ -75,7 +75,7 @@ class TreeTest < Minitest::Test
     assert_equal b_tree.fetch_node(14), @node3
   end
 
-  def test_that_it_replaces_with_correct_node
+  def test_that_it_replaces_with_correct_node_left
     replaced = b_tree.delete(14)
 
     assert_equal replaced.first.value, 15
@@ -83,6 +83,17 @@ class TreeTest < Minitest::Test
 
     assert_equal replaced.last.value, 14
     assert_equal replaced.last.key, 'Movie'
+  end
+
+  def test_that_it_replaces_with_correct_node_right
+    @node6.key = 'Bomb!'
+    replaced = b_tree.delete(20)
+
+    assert_equal replaced.first.value, 30
+    assert_equal replaced.first.key, 'Movie'
+
+    assert_equal replaced.last.value, 20
+    assert_equal replaced.last.key, 'Bomb!'
   end
 
   def test_that_it_deletes_correct_node

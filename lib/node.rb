@@ -70,7 +70,9 @@ class Node
 
   def fetch_node(fetch_value)
     return self if @value == fetch_value
-    filter(fetch_value) { |go| @childs[go].fetch_node(fetch_value) }
+    filter(fetch_value) do |go|
+      @childs[go].fetch_node(fetch_value)
+    end
   end
 
   def max(value)

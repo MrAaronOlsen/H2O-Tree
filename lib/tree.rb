@@ -48,10 +48,6 @@ class Tree
     @head.leaves(0)
   end
 
-  def find_has_child(node)
-    @head.find_has_child(node)
-  end
-
   def health(level)
     total_nodes = count_nodes
 
