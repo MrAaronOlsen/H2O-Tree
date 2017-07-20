@@ -20,10 +20,6 @@ class Tree
     remove(deleted)
   end
 
-  def remove(node)
-    @head.remove_child(node)
-  end
-
   def fetch_node(value)
     @head.fetch_node(value)
   end
@@ -48,7 +44,7 @@ class Tree
     @head.leaves(0)
   end
 
-  def health(level)
+  def health(level = 0)
     total_nodes = count_nodes
 
     @head.health(level).map do |report|
@@ -74,11 +70,16 @@ class Tree
     inserts
   end
 
+  private
   def parse(file)
     File.readlines(file).map do |line|
       i = line.index(",")
       [line[i+2..-1].chomp, line[0...i].to_i]
     end
+  end
+
+  def remove(node)
+    @head.remove_child(node)
   end
 
   def node_from(key_or_node, value = nil)

@@ -71,6 +71,10 @@ class TreeTest < Minitest::Test
     assert_equal b_tree.insert(node6), 3
   end
 
+  def test_that_insert_returns_depth_of_inserted_key_value
+    assert_equal b_tree.insert("Movie", 7), 3
+  end
+
   def test_that_fetch_node_gets_correct_node
     assert_equal b_tree.fetch_node(14), @node3
   end
@@ -115,12 +119,6 @@ class TreeTest < Minitest::Test
 
   def test_that_include_returns_false_on_balanced_tree
     refute b_tree.include?(7)
-  end
-
-  def test_that_node_from_makes_node
-    b_tree = Tree.new
-    assert_instance_of Node, b_tree.node_from(Node.new)
-    assert_instance_of Node, b_tree.node_from("Movie", 10)
   end
 
   def test_that_max_returns_max
