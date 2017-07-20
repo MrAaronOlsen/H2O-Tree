@@ -1,5 +1,8 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "test/"
+end
+
 SimpleCov.command_name 'test:units'
 
 require "minitest/autorun"
